@@ -21,6 +21,7 @@ class Supplier extends Model
         'street',
         'number',
         'district',
+        'mailcode',
         'complement',
         'city',
         'state',

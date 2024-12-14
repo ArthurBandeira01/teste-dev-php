@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('street');
             $table->integer('number');
             $table->string('district');
+            $table->string('mailcode');
             $table->string('complement')->nullable();
             $table->string('city');
             $table->string('state', 2);

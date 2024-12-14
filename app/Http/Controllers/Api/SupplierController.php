@@ -3,63 +3,82 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SupplierRequest;
+use App\Http\Resources\SupplierResource;
+use App\Services\SupplierService;
 use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public $supplierService;
+
+    public function __construct(SupplierService $supplierService)
     {
-        //
+        $this->supplierService = $supplierService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Lista os fornecedores
      */
-    public function create()
+    public function list()
     {
-        //
+        $suppliers = $this->supplierService->list();
+
+        return SupplierResource::collection($suppliers);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Cria o fornecedor
      */
-    public function store(Request $request)
+    public function store(SupplierRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        if ($validatedData) {
+            try {
+                $this->supplierService->store($validatedData);
+
+                return response()->json(['message' => 'Fornecedor criado com sucesso'], 201);
+            } catch (\Exception $exception){
+                $errorMessage = $exception->getMessage();
+                return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+            }
+        }
+
+        return response()->json(['message' => 'Erro ao validar dados do fornecedor'], 400);
     }
 
     /**
-     * Display the specified resource.
+     * Mostra o fornecedor escolhido
      */
     public function show(string $id)
     {
-        //
+        $supplier = $this->supplierService->show($id);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Atualiza o fornecedor
      */
-    public function edit(string $id)
+    public function update(SupplierRequest $request, string $id)
     {
-        //
+        try {
+            $supplier = $this->supplierService->update($id, $request);
+        } catch (\Exception $exception) {
+            $errorMessage = $exception->getMessage();
+            return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
+     * Remove o fornecedor com soft delete
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $supplier = $this->supplierService->delete($id);
+        } catch (\Exception $exception) {
+            $errorMessage = $exception->getMessage();
+            return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+        }
     }
 }
