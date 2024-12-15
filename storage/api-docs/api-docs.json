@@ -1,0 +1,145 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Fusion Center Documentation",
+        "description": "Fusion Center Documentation",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api",
+            "description": "local server"
+        },
+        {
+            "url": "http://staging.example.com",
+            "description": "staging server"
+        },
+        {
+            "url": "http://example.com",
+            "description": "production server"
+        }
+    ],
+    "paths": {
+        "/api/suppliers": {
+            "get": {
+                "tags": [
+                    "Suppliers"
+                ],
+                "summary": "Lista os fornecedores",
+                "operationId": "8d6ee632dcc4255d32b49b57c8934b31",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Suppliers"
+                ],
+                "summary": "Cria fornecedores",
+                "operationId": "dc5dc7ccb140cd5b81cab6f42b396691",
+                "responses": {
+                    "200": {
+                        "description": "Fornecedor criado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na requisição. Possíveis causas:\n        *                      - Documento CPF/CNPJ inválido.\n        *                      - CEP inválido.\n        *                      - Erro ao criar fornecedor."
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/suppliers/show/{id}": {
+            "get": {
+                "tags": [
+                    "Suppliers"
+                ],
+                "summary": "Obter detalhes de um fornecedor",
+                "operationId": "a49aab7f30715ff13e5d1de8a233e38a",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "Código do fornecedor",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalhes do fornecedor"
+                    }
+                }
+            }
+        },
+        "/suppliers/{id}": {
+            "put": {
+                "tags": [
+                    "Suppliers"
+                ],
+                "summary": "Atualizar um fornecedor",
+                "operationId": "4db4ce948b91abe1f157ae5b6568eacb",
+                "responses": {
+                    "200": {
+                        "description": "Fornecedor atualizado com sucesso"
+                    },
+                    "400": {
+                        "description": "Erro na requisição. Possíveis causas:\n        *                      - Documento CPF/CNPJ inválido.\n        *                      - CEP inválido.\n        *                      - Erro ao criar fornecedor."
+                    },
+                    "422": {
+                        "description": "Erro de validação"
+                    }
+                }
+            }
+        },
+        "/suppliers/{code}": {
+            "delete": {
+                "tags": [
+                    "Suppliers"
+                ],
+                "summary": "Excluir um fornecedor",
+                "operationId": "eeb3e053ce8fb5b9e6ea5a0e85406b3b",
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "Código do fornecedor",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fornecedor excluído com sucesso"
+                    },
+                    "422": {
+                        "description": "Falha para excluir o fornecedor"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Suppliers",
+            "description": "Suppliers"
+        }
+    ]
+}

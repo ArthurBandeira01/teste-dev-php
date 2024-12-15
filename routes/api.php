@@ -25,5 +25,3 @@ Route::prefix('suppliers')->group(function () {
     // Excluir um fornecedor
     Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 });
-
-Route::post('/documentation', [SupplierController::class, 'documentation']);

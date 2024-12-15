@@ -13,6 +13,11 @@ class SupplierRepository
         $this->supplier = $supplier;
     }
 
+    public function paginate()
+    {
+        return $this->supplier->paginate(15);
+    }
+
     public function list()
     {
         return $this->supplier->all();

@@ -21,9 +21,25 @@ class SupplierController extends Controller
         $this->supplierService = $supplierService;
     }
 
+    public function listSupplier()
+    {
+        $suppliers = $this->supplierService->paginate();
+
+        return view('suppliers', compact('suppliers'));
+    }
+
     /**
-     * Lista os fornecedores
-     */
+        * @OA\Get(
+        *     path="/api/suppliers",
+        *     summary="Lista os fornecedores",
+        *     tags={"Suppliers"},
+        *     @OA\Response(
+        *         response="200",
+        *         description="OK"
+        *     )
+        * )
+    */
+
     public function list()
     {
         $suppliers = $this->supplierService->list();
@@ -32,8 +48,28 @@ class SupplierController extends Controller
     }
 
     /**
-     * Cria o fornecedor
-     */
+        * @OA\Post(
+        *     path="/api/suppliers",
+        *     summary="Cria fornecedores",
+        *     tags={"Suppliers"},
+        *     @OA\Response(
+        *         response="200",
+        *         description="Fornecedor criado com sucesso"
+        *     ),
+        *     @OA\Response(
+        *         response="400",
+        *         description="Erro na requisição. Possíveis causas:
+        *                      - Documento CPF/CNPJ inválido.
+        *                      - CEP inválido.
+        *                      - Erro ao criar fornecedor."
+        *      ),
+        *      @OA\Response(
+        *         response="422",
+        *         description="Erro de validação"
+        *      )
+        * )
+    */
+
     public function store(SupplierRequest $request): JsonResponse
     {
         try {
@@ -61,8 +97,24 @@ class SupplierController extends Controller
     }
 
     /**
-     * Mostra o fornecedor escolhido
+        * @OA\Get(
+        *     path="/suppliers/show/{id}",
+        *     summary="Obter detalhes de um fornecedor",
+        *     tags={"Suppliers"},
+        *     @OA\Parameter(
+        *         name="code",
+        *         in="path",
+        *         required=true,
+        *         description="Código do fornecedor",
+        *         @OA\Schema(type="string")
+        *     ),
+        *     @OA\Response(
+        *         response="200",
+        *         description="Detalhes do fornecedor"
+        *     )
+        * )
      */
+
     public function show(string $id): SupplierResource
     {
         $supplier = $this->supplierService->show($id);
@@ -71,7 +123,26 @@ class SupplierController extends Controller
     }
 
     /**
-     * Atualiza o fornecedor
+        * @OA\Put(
+        *     path="/suppliers/{id}",
+        *     summary="Atualizar um fornecedor",
+        *     tags={"Suppliers"},
+        *     @OA\Response(
+        *         response="200",
+        *         description="Fornecedor atualizado com sucesso"
+        *     ),
+        *     @OA\Response(
+        *         response="400",
+        *         description="Erro na requisição. Possíveis causas:
+        *                      - Documento CPF/CNPJ inválido.
+        *                      - CEP inválido.
+        *                      - Erro ao criar fornecedor."
+        *      ),
+        *      @OA\Response(
+        *         response="422",
+        *         description="Erro de validação"
+        *      )
+        * )
      */
     public function update(SupplierRequest $request, string $id): JsonResponse
     {
@@ -100,21 +171,35 @@ class SupplierController extends Controller
     }
 
     /**
-     * Remove o fornecedor com soft delete
+      * @OA\Delete(
+        *     path="/suppliers/{code}",
+        *     summary="Excluir um fornecedor",
+        *     tags={"Suppliers"},
+        *     @OA\Parameter(
+        *         name="code",
+        *         in="path",
+        *         required=true,
+        *         description="Código do fornecedor",
+        *         @OA\Schema(type="string")
+        *     ),
+        *     @OA\Response(
+        *         response="200",
+        *         description="Fornecedor excluído com sucesso"
+        *     ),
+        *     @OA\Response(
+        *         response="422",
+        *         description="Falha para excluir o fornecedor"
+        *     )
+        * )
      */
     public function destroy(string $id): JsonResponse
     {
         try {
             $supplier = $this->supplierService->destroy($id);
-            return response()->json(['message' => 'Fornecedor deletado com sucesso'], 201);
+            return response()->json(['message' => 'Fornecedor excluído com sucesso'], 200);
         } catch (\Exception $exception) {
             $errorMessage = $exception->getMessage();
-            return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+            return response()->json(['message' => 'Falha para excluir o fornecedor. Erro: ' .$errorMessage], 422);
         }
-    }
-
-
-    public function documentation(Request $request){
-        dd('docs');
     }
 }
