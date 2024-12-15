@@ -17,11 +17,13 @@ Route::prefix('suppliers')->group(function () {
     Route::post('/', [SupplierController::class, 'store'])->name('supplier.store');
 
     // Mostra o fornecedor
-    Route::put('/show/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+    Route::get('/show/{id}', [SupplierController::class, 'show'])->name('supplier.show');
 
     // Atualizar um fornecedor existente
     Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
 
     // Excluir um fornecedor
-    Route::delete('/{id}', [SupplierController::class, 'delete'])->name('supplier.delete');
+    Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
 });
+
+Route::post('/documentation', [SupplierController::class, 'documentation']);

@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SupplierRequest;
 use App\Http\Resources\SupplierResource;
 use App\Services\SupplierService;
+use App\Helpers\FunctionsHelper;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+
 
 class SupplierController extends Controller
 {
@@ -30,55 +34,87 @@ class SupplierController extends Controller
     /**
      * Cria o fornecedor
      */
-    public function store(SupplierRequest $request)
+    public function store(SupplierRequest $request): JsonResponse
     {
-        $validatedData = $request->validated();
-
-        if ($validatedData) {
-            try {
-                $this->supplierService->store($validatedData);
-
-                return response()->json(['message' => 'Fornecedor criado com sucesso'], 201);
-            } catch (\Exception $exception){
-                $errorMessage = $exception->getMessage();
-                return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+        try {
+            // Valida cnpj/cpf
+            $verifyDocument = FunctionsHelper::verifyDocument($request['document']);
+            if (!$verifyDocument) {
+                return response()->json(['message' => 'Documento CPF/CNPJ inválido.'], 400);
             }
-        }
 
-        return response()->json(['message' => 'Erro ao validar dados do fornecedor'], 400);
+            // Valida CEP
+            $verifyCep = FunctionsHelper::verifyCep($request['mailcode']);
+            if (!$verifyCep) {
+                return response()->json(['message' => 'CEP inválido.'], 400);
+            }
+
+            $this->supplierService->store($request->validated());
+
+            return response()->json(['message' => 'Fornecedor criado com sucesso'], 201);
+
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'Erro de validação', 'errors' => $e->errors()], 422);
+        } catch (\Exception $exception) {
+            return response()->json(['message' => 'Falha ao criar fornecedor. Erro: ' . $exception->getMessage()], 422);
+        }
     }
 
     /**
      * Mostra o fornecedor escolhido
      */
-    public function show(string $id)
+    public function show(string $id): SupplierResource
     {
         $supplier = $this->supplierService->show($id);
+
+        return new SupplierResource($supplier);
     }
 
     /**
      * Atualiza o fornecedor
      */
-    public function update(SupplierRequest $request, string $id)
+    public function update(SupplierRequest $request, string $id): JsonResponse
     {
         try {
-            $supplier = $this->supplierService->update($id, $request);
+            // Valida cnpj/cpf
+            $verifyDocument = FunctionsHelper::verifyDocument($request['document']);
+            if (!$verifyDocument) {
+                return response()->json(['message' => 'Documento CPF/CNPJ inválido.'], 400);
+            }
+
+            // Valida CEP
+            $verifyCep = FunctionsHelper::verifyCep($request['mailcode']);
+            if (!$verifyCep) {
+                return response()->json(['message' => 'CEP inválido.'], 400);
+            }
+
+            $this->supplierService->update($id, $request->validated());
+
+            return response()->json(['message' => 'Fornecedor atualizado com sucesso'], 201);
+
+        } catch (ValidationException $e) {
+            return response()->json(['message' => 'Erro de validação', 'errors' => $e->errors()], 422);
         } catch (\Exception $exception) {
-            $errorMessage = $exception->getMessage();
-            return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
+            return response()->json(['message' => 'Falha ao atualizar fornecedor. Erro: ' . $exception->getMessage()], 422);
         }
     }
 
     /**
      * Remove o fornecedor com soft delete
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         try {
-            $supplier = $this->supplierService->delete($id);
+            $supplier = $this->supplierService->destroy($id);
+            return response()->json(['message' => 'Fornecedor deletado com sucesso'], 201);
         } catch (\Exception $exception) {
             $errorMessage = $exception->getMessage();
             return response()->json(['message' => 'Falha para criar fornecedor. Erro: ' .$errorMessage], 422);
         }
+    }
+
+
+    public function documentation(Request $request){
+        dd('docs');
     }
 }

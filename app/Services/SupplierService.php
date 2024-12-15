@@ -33,8 +33,8 @@ class SupplierService
         return $this->supplierRepository->update($id, $request);
     }
 
-    public function delete(int $id)
+    public function destroy(int $id)
     {
-        return $this->supplierRepository->delete($id);
+        return $this->supplierRepository->destroy($id);
     }
 }

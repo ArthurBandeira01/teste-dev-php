@@ -28,14 +28,14 @@ class SupplierRepository
         return $this->supplier->find($id);
     }
 
-    public function update(int $id, $request)
+    public function update(int $id, array $request)
     {
         $supplier = $this->show($id);
 
-        return $supplier->update([$request]);
+        return $supplier->update($request);
     }
 
-    public function delete(int $id)
+    public function destroy(int $id)
     {
         $supplier = $this->show($id);
 
