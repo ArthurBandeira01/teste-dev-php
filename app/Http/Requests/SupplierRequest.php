@@ -23,6 +23,7 @@ class SupplierRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'email' => 'required|string|max:255',
             'document' => 'required|string|max:14',
             'phone' => 'required|string|max:30',
             'street' => 'required|string|max:255',
@@ -42,6 +43,10 @@ class SupplierRequest extends FormRequest
             'name.required' => 'O campo Nome é obrigatório.',
             'name.string' => 'O campo Nome deve ser um texto.',
             'name.max' => 'O campo Nome deve ter no máximo 255 caracteres.',
+
+            'email.required' => 'O campo E-mail é obrigatório.',
+            'email.string' => 'O campo E-mail deve ser um texto.',
+            'email.max' => 'O campo E-mail deve ter no máximo 255 caracteres.',
 
             'document.required' => 'O campo Documento é obrigatório.',
             'document.string' => 'O campo Documento deve ser um texto.',

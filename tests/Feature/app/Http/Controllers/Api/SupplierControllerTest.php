@@ -20,6 +20,7 @@ test('deve listar todos os fornecedores', function () {
 test('deve criar um novo fornecedor com sucesso', function () {
     $payload = [
             "name" => "Arthur Bandeira",
+            "email" => "arthur@gmail.com",
             "document" => "37565587117",
             "phone" => "(51) 9 95068118",
             "street" => "Mário Godoy Ilha",
@@ -42,6 +43,7 @@ test('deve criar um novo fornecedor com sucesso', function () {
 test('deve retornar erro se o mailcode não for fornecido', function () {
     $payload = [
         "name" => "Arthur Bandeira",
+        "email" => "arthur@gmail.com",
         "document" => "37565587117",
         "phone" => "(51) 9 95068118",
         "street" => "Mário Godoy Ilha",
@@ -62,6 +64,7 @@ test('deve retornar erro se o mailcode não for fornecido', function () {
 test('deve atualizar um fornecedor com sucesso', function () {
     $payload = [
         "name" => "Arthur Bandeira Atualizado",
+        "email" => "arthur@gmail.com",
         "document" => "37565587117",
         "phone" => "(51) 9 95068118",
         "street" => "Mário Godoy Ilha Atualizada",

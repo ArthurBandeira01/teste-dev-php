@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Supplier;
+use App\Helpers\FunctionsHelper;
 use Faker\Factory as Faker;
 
 /**
@@ -19,7 +20,8 @@ class SupplierFactory extends Factory
 
         return [
             'name' => $this->faker->company,
-            'document' => $faker->cpf,
+            'email' => $this->faker->email,
+            'document' => FunctionsHelper::removeMaskCpfCnpj($faker->cpf),
             'phone' => $this->faker->phoneNumber,
             'street' => $this->faker->streetName,
             'number' => $this->faker->buildingNumber,

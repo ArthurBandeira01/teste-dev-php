@@ -22,7 +22,7 @@
                     <th scope="row">{{ $supplier->id }}</th>
                     <td>{{ $supplier->name }}</td>
                     <td>{{ $supplier->email }}</td>
-                    <td>{{ $supplier->document }}</td>
+                    <td>{{ App\Helpers\FunctionsHelper::maskCpfCnpj($supplier->document) }}</td>
                     <td>{{ $supplier->city }}</td>
                     <td>{{ $supplier->state }}</td>
                     <td>{{ $supplier->created_at }}</td>

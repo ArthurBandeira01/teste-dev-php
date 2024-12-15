@@ -49,6 +49,14 @@ Para realizar os testes de endpoint utilizei o Pest PHP, e para rodá-los, basta
     php artisan test
 ```
 
+Na rota "/" é possível verificar os usuários cadastrados em um paginate.
+
+Foi criada uma factory para popular o banco, basta rodar o seeder:
+
+```bash
+    php artisan db:seed --class=SupplierSeeder
+```
+
 ## Referências das tecnologias usadas
 
  - [Laravel](https://laravel.com/docs/10.x)

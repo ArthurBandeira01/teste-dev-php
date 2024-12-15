@@ -12,7 +12,7 @@ class FunctionsHelper
         return strtoupper($string);
     }
 
-    public static function timeToBrazil(string $time)
+    public function timeToBrazil(string $time)
     {
         return date("H:i", strtotime($time));
     }
@@ -37,6 +37,15 @@ class FunctionsHelper
     public static function formatDecimalSqlToCurrencyBr(float $valor): string
     {
         return number_format($valor, 2, ',', '.');
+    }
+
+    public static function maskCpfCnpj($document)
+    {
+        if (strlen($document) === 11) {
+            return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $document);
+        }
+
+        return preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $document);
     }
 
     // Remove caracteres que não sejam números no documento
